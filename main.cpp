@@ -91,14 +91,14 @@ int main(int argc, char* argv[]) {
 	ifstream archivo(input.c_str());
 	string linea;
 	vector<string> coincidencias;
-	cout << "comienza lista:" << endl;
+
 	while (getline(archivo,linea)){
 		search(prefix, linea, coincidencias);
 	}
 	sort(coincidencias);
 	for (int i = 0; i < coincidencias.size(); i++)
 	{
-		cout << i << " " << coincidencias[i]<< endl; 
+		cout << coincidencias[i]<< endl; 
 	}
 	return 0;
 }
