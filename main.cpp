@@ -12,6 +12,37 @@
 #include <sstream>
 using namespace std;
 
+void openFile(ifstream& inFile,string fname){
+	inFile.open(fname);
+	if (inFile.is_open()){
+		// cout << "Successfully opened file"<<endl;
+	}
+	else{
+		cout << "Failed to open file" << endl;
+		exit(-1);
+	}
+}
+
+vector<string> processFile(ifstream& inFile,int i, int limit){
+	//read line by line
+	vector<string> content;
+	string line;
+	int cont=0;
+	
+	while (!inFile.eof() && i < limit){
+		i++;
+		getline(inFile,line);
+		// bool found = line.find('.');
+		//found == 1 == No se encontro punto
+		if(inFile.good()){
+			content.push_back(line);
+			
+		}
+		cont++;
+
+	} 
+	return content;
+}
 
 void search(string prefix, string linea, vector<string> &coincidencias){
 	string busqueda = linea.substr( 17, 3 );
@@ -20,7 +51,6 @@ void search(string prefix, string linea, vector<string> &coincidencias){
 	}
 
 }
-
 
 void swap(vector<string> &coincidencias, int i, int j) {
 	string aux = coincidencias[i];
@@ -85,16 +115,33 @@ void sort( vector<string> &coincidencias){
 }
 
 int main(int argc, char* argv[]) {
-	argc= 805;
-	string prefix= "1FR";
-	string input = "input.txt";
-	ifstream archivo(input.c_str());
-	string linea;
-	vector<string> coincidencias;
-
-	while (getline(archivo,linea)){
-		search(prefix, linea, coincidencias);
+	ifstream inFile;
+	openFile(inFile,"input2.txt");
+	//obtener linea 1
+	vector<string> linea1 = processFile(inFile,0,1);
+	string linea, linea2;
+	char delimiter= ' ';
+	vector<string> linea1separada;
+	for (int i = 0; i < linea1.size(); i++){
+		stringstream x(linea1[i]);
+		while (getline(x, linea, delimiter)) {
+        linea1separada.push_back(linea);
+		}
 	}
+	stringstream nP(linea1separada[0]);
+	string prefix = linea1separada[1];
+	nP >> argc;
+	// obtener lineas registros
+	vector<string> r1 = processFile(inFile,1,argc+1);
+	vector<string> coincidencias;
+	for (int i = 0; i < r1.size() ; i++){
+		stringstream y(r1[i]);
+		while (getline(y,linea2)){
+			search(prefix, linea2, coincidencias);
+		}
+	}
+
+	// BUSCAR COINCIDENCIAS
 	sort(coincidencias);
 	for (int i = 0; i < coincidencias.size(); i++)
 	{
